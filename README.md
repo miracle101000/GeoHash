@@ -9,7 +9,6 @@ Geohash is a system for encoding a `(latitude, longitude)` pair into a single Ba
 The longer the shared prefix between two hashes, the closer they are to each other. For example `abcdef` is closer to `abcdeg` than `abcdff`. However the converse is not true! Two areas may be very close to each other while having very different Geohashes:
 
 <img width="302" alt="Screen Shot 2021-06-20 at 1 58 09 PM" src="https://user-images.githubusercontent.com/83901702/122663789-8e411f00-d1cf-11eb-9a84-c05246d97a0d.png">
-
 ```dart
 // Compute the GeoHash for a lat/lng point
 double lat = 51.5074;
@@ -22,16 +21,16 @@ String hash = geofire.geohashForLocation(GeoPoint(lat, lng));
 // for queries and the lat/lng for distance comparisons.
 CollectionReference londonRef = FirebaseFirestore.instance.collection('cities').doc('LON');
 londonRef.update({
-  'geohash': hash,
-  'lat': lat,
-  'lng': lng
+'geohash': hash,
+'lat': lat,
+'lng': lng
 }).then((){
-  // ...
+// ...
 });
 
 // Find cities within 50km of London
 GeoPoint center = GeoPoint(51.5074, 0.1278);
-double radiusInM = 50 * 1000;
+double radiusInM = 50 \* 1000;
 
 // Each item in 'bounds' represents a startAt/endAt pair. We have to issue
 // a separate query for each pair. There can be up to 9 pairs of bounds
@@ -39,21 +38,21 @@ double radiusInM = 50 * 1000;
 List<List<String>> bounds = geofire.geohashQueryBounds(center, radiusInM);
 List<Future> futures = [];
 for (List<String> b of bounds) {
-  var q = FirebaseFirestore.instance.collection('cities')
-    .orderBy('geohash')
-    .startAt([b[0]])
-    .endAt([b[1]]);
-  futures.add(q.get());
+var q = FirebaseFirestore.instance.collection('cities')
+.orderBy('geohash')
+.startAt([b[0]])
+.endAt([b[1]]);
+futures.add(q.get());
 }
 
 // Collect all the query results together into a single list
 await Future.wait(futures).then((snapshots){
-  var matchingDocs = [];
+var matchingDocs = [];
 
-  for (var snap of snapshots) {
-    for (var doc of snap.docs) {
-      var lat = doc['lat'];
-      var lng = doc['lng'];
+for (var snap of snapshots) {
+for (var doc of snap.docs) {
+var lat = doc['lat'];
+var lng = doc['lng'];
 
       // We have to filter out a few false positives due to GeoHash
       // accuracy, but most will match
@@ -63,12 +62,15 @@ await Future.wait(futures).then((snapshots){
         matchingDocs.add(doc);
       }
     }
-  }
-  return matchingDocs;
+
+}
+return matchingDocs;
+<<<<<<< HEAD
 }).then((matchingDocs){
-  // Process the matching documents
-  // ...
+// Process the matching documents
+// ...
 });
+
 ```
 
 # Limitations
@@ -78,3 +80,12 @@ Using Geohashes for querying locations gives us new capabilities, but comes with
 False Positives - querying by Geohash is not exact, and you have to filter out false-positive results on the client side. These extra reads add cost and latency to your app.
 
 Edge Cases - this query method relies on estimating the distance between lines of longitude/latitude. The accuracy of this estimate decreases as points get closer to the North or South Pole which means Geohash queries have more false positives at extreme latitudes.
+=======
+}).then((matchingDocs) => {
+  // Process the matching documents
+  // ...
+});
+
+```
+
+> > > > > > > 22da765 (Update README.md)
