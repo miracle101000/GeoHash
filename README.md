@@ -1,4 +1,4 @@
-# GeoHash
+# GeoHash Flutter
 
 [Firebase Solutions Geoqueries](https://firebase.google.com/docs/firestore/solutions/geoqueries)
 
