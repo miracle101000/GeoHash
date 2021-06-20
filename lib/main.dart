@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geo_hash/geo_hash.dart';
 
 void main() {
   runApp(MyApp());
@@ -49,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   void _incrementCounter() {
+   MyGeoHash geoHash =  MyGeoHash();
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
