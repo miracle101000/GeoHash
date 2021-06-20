@@ -45,7 +45,7 @@ class MyGeoHash {
   ///
   /// @param key The key to be verified.
 
-  static validateKey(String key) {
+   validateKey(String key) {
     String error;
     if (key is String == false) {
       error = 'key must be a string';
@@ -68,7 +68,7 @@ class MyGeoHash {
 
   /// Validates the inputted location and throws an error if it is invalid.
   /// @param location The [latitude, longitude] pair to be verified.
-  static _validateLocation(GeoPoint location) {
+   validateLocation(GeoPoint location) {
     String error;
 
     if (location is GeoPoint == false) {
@@ -123,7 +123,7 @@ class MyGeoHash {
   /// Converts degrees to radians.
   /// @param degrees The number of degrees to be converted to radians.
   /// @returns The number of radians equal to the inputted number of degrees.
-  static degreesToRadians(double degrees) {
+  double degreesToRadians(double degrees) {
     if (degrees is double == false || degrees.isNaN) {
       throw ('Error: degrees must be a number');
     }
@@ -137,9 +137,9 @@ class MyGeoHash {
   /// @param precision The length of the geohash to create. If no precision is specified, the
   /// global default is used.
   /// @returns The geohash of the inputted location.
-  static String geoHashForLocation(GeoPoint location,
+  String geoHashForLocation(GeoPoint location,
       {int precision = GEOHASH_PRECISION}) {
-    _validateLocation(location);
+    validateLocation(location);
     if (precision != null) {
       if (precision is int == false || precision.isNaN) {
         throw ('precision must be an integer');
@@ -184,7 +184,7 @@ class MyGeoHash {
   /// @param distance The distance to convert.
   /// @param latitude The latitude at which to calculate.
   /// @returns The number of degrees the distance corresponds to.
-  static double metersToLongitudeDegrees(double distance, double latitude) {
+   double metersToLongitudeDegrees(double distance, double latitude) {
     var radians = degreesToRadians(latitude);
     var num = cos(radians) * EARTH_EQ_RADIUS * pi / 180;
     var denom = 1 / sqrt(1 - E2 * sin(radians) * sin(radians));
@@ -202,7 +202,7 @@ class MyGeoHash {
   /// @param resolution The desired resolution.
   /// @param latitude The latitude used in the conversion.
   /// @return The bits necessary to reach a given resolution, in meters.
-  static double _longitudeBitsForResolution(
+  double longitudeBitsForResolution(
       double resolution, double latitude) {
     var degs = metersToLongitudeDegrees(resolution, latitude);
     return (degs.abs() > 0.000001) ? max(1, log2(360 / degs)) : 1;
@@ -212,7 +212,7 @@ class MyGeoHash {
   ///
   /// @param resolution The bits necessary to reach a given resolution, in meters.
   /// @returns Bits necessary to reach a given resolution, in meters, for the latitude.
-  static double _latitudeBitsForResolution(double resolution) {
+   double latitudeBitsForResolution(double resolution) {
     return min(log2(EARTH_MERI_CIRCUMFERENCE / 2 / resolution),
         MAXIMUM_BITS_PRECISION.toDouble());
   }
@@ -221,7 +221,7 @@ class MyGeoHash {
   ///
   /// @param longitude The longitude to wrap.
   /// @returns longitude The resulting longitude.
-  static double _wrapLongitude(double longitude) {
+   double wrapLongitude(double longitude) {
     if (longitude <= 180 && longitude >= -180) {
       return longitude;
     }
@@ -239,15 +239,15 @@ class MyGeoHash {
   /// @param coordinate The coordinate as a [latitude, longitude] pair.
   /// @param size The size of the bounding box.
   /// @returns The number of bits necessary for the geohash.
-  static int boundingBoxBits(GeoPoint point, double size) {
+    int boundingBoxBits(GeoPoint point, double size) {
     var latDeltaDegrees = size / METERS_PER_DEGREE_LATITUDE;
     var latitudeNorth = min(90, point.latitude + latDeltaDegrees);
     var latitudeSouth = max(-90, point.latitude - latDeltaDegrees);
-    var bitsLat = (_latitudeBitsForResolution(size)).floor() * 2;
+    var bitsLat = (latitudeBitsForResolution(size)).floor() * 2;
     var bitsLongNorth =
-        (_longitudeBitsForResolution(size, latitudeNorth)).floor() * 2 - 1;
+        (longitudeBitsForResolution(size, latitudeNorth)).floor() * 2 - 1;
     var bitsLongSouth =
-        (_longitudeBitsForResolution(size, latitudeSouth)).floor() * 2 - 1;
+        (longitudeBitsForResolution(size, latitudeSouth)).floor() * 2 - 1;
     return [bitsLat, bitsLongNorth, bitsLongSouth, MAXIMUM_BITS_PRECISION]
         .reduce(min);
   }
@@ -259,7 +259,7 @@ class MyGeoHash {
   /// @param center The center given as [latitude, longitude].
   /// @param radius The radius of the circle in meters.
   /// @returns The center of the box, and the eight bounding box points.
-  static List<GeoPoint> boundingBoxCoordinates(GeoPoint center, double radius) {
+    List<GeoPoint> boundingBoxCoordinates(GeoPoint center, double radius) {
     double latDegrees = radius / METERS_PER_DEGREE_LATITUDE;
     double latitudeNorth = min(90, center.latitude + latDegrees);
     double latitudeSouth = max(-90, center.latitude - latDegrees);
@@ -268,14 +268,14 @@ class MyGeoHash {
     double longDegs = max(longDegsNorth, longDegsSouth);
     return [
       center,
-      GeoPoint(center.latitude, _wrapLongitude(center.longitude - longDegs)),
-      GeoPoint(center.latitude, _wrapLongitude(center.longitude + longDegs)),
+      GeoPoint(center.latitude, wrapLongitude(center.longitude - longDegs)),
+      GeoPoint(center.latitude, wrapLongitude(center.longitude + longDegs)),
       GeoPoint(latitudeNorth, center.longitude),
-      GeoPoint(latitudeNorth, _wrapLongitude(center.longitude - longDegs)),
-      GeoPoint(latitudeNorth, _wrapLongitude(center.longitude + longDegs)),
+      GeoPoint(latitudeNorth, wrapLongitude(center.longitude - longDegs)),
+      GeoPoint(latitudeNorth, wrapLongitude(center.longitude + longDegs)),
       GeoPoint(latitudeSouth, center.longitude),
-      GeoPoint(latitudeSouth, _wrapLongitude(center.longitude - longDegs)),
-      GeoPoint(latitudeSouth, _wrapLongitude(center.longitude + longDegs)),
+      GeoPoint(latitudeSouth, wrapLongitude(center.longitude - longDegs)),
+      GeoPoint(latitudeSouth, wrapLongitude(center.longitude + longDegs)),
     ];
   }
 
@@ -284,7 +284,7 @@ class MyGeoHash {
   /// @param geohash The geohash whose bounding box query to generate.
   /// @param bits The number of bits of precision.
   /// @returns A [start, end] pair of geohashes.
-  static List<String> geohashQuery(String geoHash, int bits) {
+   List<String> geohashQuery(String geoHash, int bits) {
     _validateGeoHash(geoHash);
     var precision = (bits / BITS_PER_CHAR).ceil();
     if (geoHash.length < precision) {
@@ -311,8 +311,8 @@ class MyGeoHash {
   /// @param center The center given as [latitude, longitude] pair.
   /// @param radius The radius of the circle.
   /// @return An array of geohash query bounds, each containing a [start, end] pair.
-  static List<List<String>> geohashQueryBounds(GeoPoint center, double radius) {
-    _validateLocation(center);
+    List<List<String>> geohashQueryBounds(GeoPoint center, double radius) {
+    validateLocation(center);
     int queryBits = max(1, boundingBoxBits(center, radius));
     var geohashPrecision = (queryBits / BITS_PER_CHAR).ceil();
     var coordinates = boundingBoxCoordinates(center, radius);
@@ -341,9 +341,9 @@ class MyGeoHash {
   /// @param location1 The [latitude, longitude] pair of the first location.
   /// @param location2 The [latitude, longitude] pair of the second location.
   /// @returns The distance, in kilometers, between the inputted locations.
-  static double distanceBetween(GeoPoint location1, GeoPoint location2) {
-    _validateLocation(location1);
-    _validateLocation(location2);
+  double distanceBetween(GeoPoint location1, GeoPoint location2) {
+    validateLocation(location1);
+    validateLocation(location2);
     var radius = 6371; // Earth's radius in kilometers
     var latDelta = degreesToRadians(location2.latitude - location1.latitude);
     var lonDelta = degreesToRadians(location2.longitude - location1.longitude);
