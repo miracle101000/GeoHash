@@ -1,8 +1,8 @@
-name: flutter_geohash
-description: GeoHash library.
+name: flutter_geo_hash
+description: Implements firebase solutions for Geohash.
+author: Miracle.O
 homepage: https://github.com/miracle101000/GeoHash
-authors:
-  - Miracle.O
+
 
    # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -18,7 +18,7 @@ authors:
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.0.1
+version: 0.0.3
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -26,14 +26,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  geo_hash:
-    path: packages/geohash
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
 
 dev_dependencies:
   flutter_test:

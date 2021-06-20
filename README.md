@@ -18,7 +18,7 @@ String hash = geofire.geohashForLocation(GeoPoint(lat, lng));
 
 // Add the hash and the lat/lng to the document. We will use the hash
 // for queries and the lat/lng for distance comparisons.
-CollectionReference londonRef = db.collection('cities').doc('LON');
+CollectionReference londonRef = FirebaseFirestore.instance.collection('cities').doc('LON');
 londonRef.update({
   'geohash': hash,
   'lat': lat,
