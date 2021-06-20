@@ -99,6 +99,7 @@ return matchingDocs;
 Using Geohashes for querying locations gives us new capabilities, but comes with its own set of limitations:
 
 False Positives - querying by Geohash is not exact, and you have to filter out false-positive results on the client side. These extra reads add cost and latency to your app.
+
 Edge Cases - this query method relies on estimating the distance between lines of longitude/latitude. The accuracy of this estimate decreases as points get closer to the North or South Pole which means Geohash queries have more false positives at extreme latitudes.
 
 > > > > > > > 22da765 (Update README.md)
