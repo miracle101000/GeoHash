@@ -46,7 +46,7 @@ class MyGeoHash {
   /// @param key The key to be verified.
 
    validateKey(String key) {
-    String error;
+    String? error;
     if (key is String == false) {
       error = 'key must be a string';
     } else if (key.length == 0) {
@@ -68,8 +68,8 @@ class MyGeoHash {
 
   /// Validates the inputted location and throws an error if it is invalid.
   /// @param location The [latitude, longitude] pair to be verified.
-   validateLocation(GeoPoint location) {
-    String error;
+   validateLocation(GeoPoint? location) {
+    String? error;
 
     if (location is GeoPoint == false) {
       error = 'location must be of type GeoPoint';
@@ -101,7 +101,7 @@ class MyGeoHash {
   /// Validates the inputted geohash and throws an error if it is invalid.
   ///  @param geohash The geohash to be validated.
   static _validateGeoHash(String geohash) {
-    String error;
+    String? error;
 
     if (geohash is String == false) {
       error = 'geohash must be a string';
@@ -116,7 +116,7 @@ class MyGeoHash {
       });
     }
     if (error != null) {
-      throw ('Invalid GeoFire geohash \'' + geohash + '\': ' + error);
+      throw ('Invalid GeoFire geohash \'' + geohash + '\': ' + error!);
     }
   }
 
@@ -158,7 +158,7 @@ class MyGeoHash {
     while (hash.length < precision) {
       var val = even ? location.longitude : location.latitude;
       var range = even ? longitudeRange : latitudeRange;
-      double mid = (range['min'] + range['max']) / 2;
+      double mid = (range['min']! + range['max']!) / 2;
 
       if (val > mid) {
         hashVal = (hashVal << 1) + 1;
@@ -241,8 +241,8 @@ class MyGeoHash {
   /// @returns The number of bits necessary for the geohash.
     int boundingBoxBits(GeoPoint point, double size) {
     var latDeltaDegrees = size / _METERS_PER_DEGREE_LATITUDE;
-    var latitudeNorth = min(90, point.latitude + latDeltaDegrees);
-    var latitudeSouth = max(-90, point.latitude - latDeltaDegrees);
+    double latitudeNorth = min(90, point.latitude + latDeltaDegrees);
+    double latitudeSouth = max(-90, point.latitude - latDeltaDegrees);
     var bitsLat = (latitudeBitsForResolution(size)).floor() * 2;
     var bitsLongNorth =
         (longitudeBitsForResolution(size, latitudeNorth)).floor() * 2 - 1;
