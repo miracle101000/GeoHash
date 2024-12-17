@@ -1,4 +1,4 @@
-import 'package:flutter_geo_hash/geohash.dart';
+import 'package:flutter_geo_hash/flutter_geo_hash.dart';
 
 void main() {
   // Create an instance of MyGeoHash
