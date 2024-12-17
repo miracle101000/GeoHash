@@ -1,10 +1,12 @@
 # GeoHash Flutter
 
+<a href="https://pub.dev/packages/flutter_geo_hash"><img src="https://img.shields.io/pub/v/flutter_geo_hash.svg" alt="Pub"></a>
+
 [Firebase Solutions Geoqueries](https://firebase.google.com/docs/firestore/solutions/geoqueries)
 
-Geohash is a system for encoding a ```(latitude, longitude)``` pair into a single Base32 string. In the Geohash system the world is divided into a rectangular grid. Each character of a Geohash string specifies one of 32 subdivisions of the prefix hash. For example the Geohash ```abcd``` is one of 32 four-character hashes fully contained within the larger Geohash ```abc```.
+Geohash is a system for encoding a `(latitude, longitude)` pair into a single Base32 string. In the Geohash system the world is divided into a rectangular grid. Each character of a Geohash string specifies one of 32 subdivisions of the prefix hash. For example the Geohash `abcd` is one of 32 four-character hashes fully contained within the larger Geohash `abc`.
 
-The longer the shared prefix between two hashes, the closer they are to each other. For example ```abcdef``` is closer to ```abcdeg``` than ```abcdff```. However the converse is not true! Two areas may be very close to each other while having very different Geohashes:
+The longer the shared prefix between two hashes, the closer they are to each other. For example `abcdef` is closer to `abcdeg` than `abcdff`. However the converse is not true! Two areas may be very close to each other while having very different Geohashes:
 
 <img width="302" alt="Screen Shot 2021-06-20 at 1 58 09 PM" src="https://user-images.githubusercontent.com/83901702/122663789-8e411f00-d1cf-11eb-9a84-c05246d97a0d.png">
 
@@ -68,7 +70,9 @@ await Future.wait(futures).then((snapshots){
   // ...
 });
 ```
-## Limitations
+
+# Limitations
+
 Using Geohashes for querying locations gives us new capabilities, but comes with its own set of limitations:
 
 False Positives - querying by Geohash is not exact, and you have to filter out false-positive results on the client side. These extra reads add cost and latency to your app.
