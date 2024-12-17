@@ -56,7 +56,8 @@ class MyGeoHash {
       error = 'key is too long to be stored in Firebase';
     } else if (key.contains('/[\[\].#\$\/\u0000-\u001F\u007F]/')) {
       // Firebase does not allow node keys to contain the following characters
-      error = "key cannot contain any of the following characters: . # /\$ ] [ /";
+      error =
+          "key cannot contain any of the following characters: . # /\$ ] [ /";
     }
 
     if (error != null) {
@@ -89,7 +90,10 @@ class MyGeoHash {
     }
 
     if (error != null) {
-      throw ('Invalid GeoFire location \'' + location.toString() + '\': ' + error);
+      throw ('Invalid GeoFire location \'' +
+          location.toString() +
+          '\': ' +
+          error);
     }
   }
 
@@ -130,7 +134,8 @@ class MyGeoHash {
   /// @param precision The length of the geohash to create. If no precision is specified, the
   /// global default is used.
   /// @returns The geohash of the inputted location.
-  String geoHashForLocation(GeoPoint location, {int precision = _GEOHASH_PRECISION}) {
+  String geoHashForLocation(GeoPoint location,
+      {int precision = _GEOHASH_PRECISION}) {
     validateLocation(location);
     if (precision.isNaN) {
       throw ('precision must be an integer');
@@ -202,7 +207,8 @@ class MyGeoHash {
   /// @param resolution The bits necessary to reach a given resolution, in meters.
   /// @returns Bits necessary to reach a given resolution, in meters, for the latitude.
   double latitudeBitsForResolution(double resolution) {
-    return min(log2(_EARTH_MERI_CIRCUMFERENCE / 2 / resolution), _MAXIMUM_BITS_PRECISION.toDouble());
+    return min(log2(_EARTH_MERI_CIRCUMFERENCE / 2 / resolution),
+        _MAXIMUM_BITS_PRECISION.toDouble());
   }
 
   /// Wraps the longitude to [-180,180].
@@ -232,9 +238,12 @@ class MyGeoHash {
     double latitudeNorth = min(90, point.latitude + latDeltaDegrees);
     double latitudeSouth = max(-90, point.latitude - latDeltaDegrees);
     var bitsLat = (latitudeBitsForResolution(size)).floor() * 2;
-    var bitsLongNorth = (longitudeBitsForResolution(size, latitudeNorth)).floor() * 2 - 1;
-    var bitsLongSouth = (longitudeBitsForResolution(size, latitudeSouth)).floor() * 2 - 1;
-    return [bitsLat, bitsLongNorth, bitsLongSouth, _MAXIMUM_BITS_PRECISION].reduce(min);
+    var bitsLongNorth =
+        (longitudeBitsForResolution(size, latitudeNorth)).floor() * 2 - 1;
+    var bitsLongSouth =
+        (longitudeBitsForResolution(size, latitudeSouth)).floor() * 2 - 1;
+    return [bitsLat, bitsLongNorth, bitsLongSouth, _MAXIMUM_BITS_PRECISION]
+        .reduce(min);
   }
 
   /// Calculates eight points on the bounding box and the center of a given circle. At least one
@@ -348,8 +357,11 @@ class MyGeoHash {
     var latDelta = degreesToRadians(location2.latitude - location1.latitude);
     var lonDelta = degreesToRadians(location2.longitude - location1.longitude);
 
-    var a =
-        (sin(latDelta / 2) * sin(latDelta / 2)) + (cos(degreesToRadians(location1.latitude)) * cos(degreesToRadians(location2.latitude)) * sin(lonDelta / 2) * sin(lonDelta / 2));
+    var a = (sin(latDelta / 2) * sin(latDelta / 2)) +
+        (cos(degreesToRadians(location1.latitude)) *
+            cos(degreesToRadians(location2.latitude)) *
+            sin(lonDelta / 2) *
+            sin(lonDelta / 2));
 
     var c = 2 * atan2(sqrt(a), sqrt(1 - a));
 
@@ -369,7 +381,10 @@ class GeoPoint {
   final double longitude; // ignore: public_member_api_docs
 
   @override
-  bool operator ==(Object other) => other is GeoPoint && other.latitude == latitude && other.longitude == longitude;
+  bool operator ==(Object other) =>
+      other is GeoPoint &&
+      other.latitude == latitude &&
+      other.longitude == longitude;
 
   @override
   int get hashCode => Object.hash(latitude, longitude);

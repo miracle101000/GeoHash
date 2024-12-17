@@ -22,7 +22,8 @@ void main() {
   final pointA = GeoPoint(37.7749, -122.4194); // San Francisco
   final pointB = GeoPoint(34.0522, -118.2437); // Los Angeles
   final distance = geoHash.distanceBetween(pointA, pointB);
-  print('Distance between $pointA and $pointB: ${distance.toStringAsFixed(2)} km');
+  print(
+      'Distance between $pointA and $pointB: ${distance.toStringAsFixed(2)} km');
 
   // Example 4: Wrap a longitude to [-180, 180] range
   final wrappedLongitude = geoHash.wrapLongitude(190.0);

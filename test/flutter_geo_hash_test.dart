@@ -19,7 +19,8 @@ void main() {
 
     test('geoHashForLocation generates correct geohash', () {
       const expectedLength = 10;
-      final result = geoHash.geoHashForLocation(geoPoint, precision: expectedLength);
+      final result =
+          geoHash.geoHashForLocation(geoPoint, precision: expectedLength);
       expect(result.length, equals(expectedLength));
       expect(result, isA<String>());
     });
@@ -37,14 +38,16 @@ void main() {
       const double latitude = 45; // Latitude for the calculation
       const double expectedResult = 0.012682816934550058;
 
-      final result = geoHash.metersToLongitudeDegrees(distanceInMeters, latitude);
+      final result =
+          geoHash.metersToLongitudeDegrees(distanceInMeters, latitude);
       expect(result, equals(expectedResult)); // Expect a positive degree value
     });
 
     test('distanceBetween calculates correct distance', () {
       const startPoint = GeoPoint(0, 0); // Start point (equator)
       const endPoint = GeoPoint(0, 1); // End point 1 longitudinal degree away
-      const double expectedDistance = 111.19492664455873; // 111 km per longitudinal degree at the equator
+      const double expectedDistance =
+          111.19492664455873; // 111 km per longitudinal degree at the equator
 
       final distance = geoHash.distanceBetween(startPoint, endPoint);
       expect(distance, equals(expectedDistance));
@@ -53,11 +56,15 @@ void main() {
     test('wrapLongitude handles out-of-bound values', () {
       const double longitudeOutOfBoundsPositive = 190; // Longitude > 180
       const double longitudeOutOfBoundsNegative = -200; // Longitude < -180
-      const double wrappedLongitudePositive = -170; // Expected wrapped longitude for 190
-      const double wrappedLongitudeNegative = 160; // Expected wrapped longitude for -200
+      const double wrappedLongitudePositive =
+          -170; // Expected wrapped longitude for 190
+      const double wrappedLongitudeNegative =
+          160; // Expected wrapped longitude for -200
 
-      expect(geoHash.wrapLongitude(longitudeOutOfBoundsPositive), equals(wrappedLongitudePositive));
-      expect(geoHash.wrapLongitude(longitudeOutOfBoundsNegative), equals(wrappedLongitudeNegative));
+      expect(geoHash.wrapLongitude(longitudeOutOfBoundsPositive),
+          equals(wrappedLongitudePositive));
+      expect(geoHash.wrapLongitude(longitudeOutOfBoundsNegative),
+          equals(wrappedLongitudeNegative));
     });
   });
 }
