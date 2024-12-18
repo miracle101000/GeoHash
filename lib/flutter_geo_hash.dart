@@ -45,11 +45,10 @@ class MyGeoHash {
   ///
   /// @param key The key to be verified.
 
-   validateKey(String key) {
+  validateKey(String key) {
     String? error;
-    if (key is String == false) {
-      error = 'key must be a string';
-    } else if (key.length == 0) {
+
+    if (key.isEmpty) {
       error = 'key cannot be the empty string';
     } else if (1 + _GEOHASH_PRECISION + key.length > 755) {
       // Firebase can only stored child paths up to 768 characters
@@ -68,7 +67,7 @@ class MyGeoHash {
 
   /// Validates the inputted location and throws an error if it is invalid.
   /// @param location The [latitude, longitude] pair to be verified.
-   validateLocation(GeoPoint? location) {
+  validateLocation(GeoPoint? location) {
     String? error;
 
     if (location is GeoPoint == false) {
@@ -79,11 +78,11 @@ class MyGeoHash {
       double latitude = location.latitude;
       double longitude = location.longitude;
 
-      if (latitude is double != true || latitude.isNaN) {
+      if (latitude.isNaN) {
         error = 'latitude must be a number';
       } else if (latitude < -90 || latitude > 90) {
         error = 'latitude must be within the range [-90, 90]';
-      } else if (longitude is double != true || longitude.isNaN) {
+      } else if (longitude.isNaN) {
         error = 'longitude must be a number';
       } else if (longitude < -180 || longitude > 180) {
         error = 'longitude must be within the range [-180, 180]';
@@ -103,9 +102,7 @@ class MyGeoHash {
   static _validateGeoHash(String geohash) {
     String? error;
 
-    if (geohash is String == false) {
-      error = 'geohash must be a string';
-    } else if (geohash.length == 0) {
+    if (geohash.isEmpty) {
       error = 'geohash cannot be the empty string';
     } else {
       geohash.runes.forEach((int rune) {
@@ -124,7 +121,7 @@ class MyGeoHash {
   /// @param degrees The number of degrees to be converted to radians.
   /// @returns The number of radians equal to the inputted number of degrees.
   double degreesToRadians(double degrees) {
-    if (degrees is double == false || degrees.isNaN) {
+    if (degrees.isNaN) {
       throw ('Error: degrees must be a number');
     }
     return (degrees * pi / 180);
@@ -140,14 +137,12 @@ class MyGeoHash {
   String geoHashForLocation(GeoPoint location,
       {int precision = _GEOHASH_PRECISION}) {
     validateLocation(location);
-    if (precision != null) {
-      if (precision is int == false || precision.isNaN) {
-        throw ('precision must be an integer');
-      } else if (precision <= 0) {
-        throw ('precision must be greater than 0');
-      } else if (precision > 22) {
-        throw ('precision cannot be greater than 22');
-      }
+    if (precision.isNaN) {
+      throw ('precision must be an integer');
+    } else if (precision <= 0) {
+      throw ('precision must be greater than 0');
+    } else if (precision > 22) {
+      throw ('precision cannot be greater than 22');
     }
     var latitudeRange = {'min': -90.0, 'max': 90.0};
     var longitudeRange = {'min': -180.0, 'max': 180.0};
@@ -184,7 +179,7 @@ class MyGeoHash {
   /// @param distance The distance to convert.
   /// @param latitude The latitude at which to calculate.
   /// @returns The number of degrees the distance corresponds to.
-   double metersToLongitudeDegrees(double distance, double latitude) {
+  double metersToLongitudeDegrees(double distance, double latitude) {
     var radians = degreesToRadians(latitude);
     var num = cos(radians) * _EARTH_EQ_RADIUS * pi / 180;
     var denom = 1 / sqrt(1 - _E2 * sin(radians) * sin(radians));
@@ -202,8 +197,7 @@ class MyGeoHash {
   /// @param resolution The desired resolution.
   /// @param latitude The latitude used in the conversion.
   /// @return The bits necessary to reach a given resolution, in meters.
-  double longitudeBitsForResolution(
-      double resolution, double latitude) {
+  double longitudeBitsForResolution(double resolution, double latitude) {
     var degs = metersToLongitudeDegrees(resolution, latitude);
     return (degs.abs() > 0.000001) ? max(1, log2(360 / degs)) : 1;
   }
@@ -212,7 +206,7 @@ class MyGeoHash {
   ///
   /// @param resolution The bits necessary to reach a given resolution, in meters.
   /// @returns Bits necessary to reach a given resolution, in meters, for the latitude.
-   double latitudeBitsForResolution(double resolution) {
+  double latitudeBitsForResolution(double resolution) {
     return min(log2(_EARTH_MERI_CIRCUMFERENCE / 2 / resolution),
         _MAXIMUM_BITS_PRECISION.toDouble());
   }
@@ -221,7 +215,7 @@ class MyGeoHash {
   ///
   /// @param longitude The longitude to wrap.
   /// @returns longitude The resulting longitude.
-   double wrapLongitude(double longitude) {
+  double wrapLongitude(double longitude) {
     if (longitude <= 180 && longitude >= -180) {
       return longitude;
     }
@@ -239,7 +233,7 @@ class MyGeoHash {
   /// @param coordinate The coordinate as a [latitude, longitude] pair.
   /// @param size The size of the bounding box.
   /// @returns The number of bits necessary for the geohash.
-    int boundingBoxBits(GeoPoint point, double size) {
+  int boundingBoxBits(GeoPoint point, double size) {
     var latDeltaDegrees = size / _METERS_PER_DEGREE_LATITUDE;
     double latitudeNorth = min(90, point.latitude + latDeltaDegrees);
     double latitudeSouth = max(-90, point.latitude - latDeltaDegrees);
@@ -259,7 +253,7 @@ class MyGeoHash {
   /// @param center The center given as [latitude, longitude].
   /// @param radius The radius of the circle in meters.
   /// @returns The center of the box, and the eight bounding box points.
-    List<GeoPoint> boundingBoxCoordinates(GeoPoint center, double radius) {
+  List<GeoPoint> boundingBoxCoordinates(GeoPoint center, double radius) {
     double latDegrees = radius / _METERS_PER_DEGREE_LATITUDE;
     double latitudeNorth = min(90, center.latitude + latDegrees);
     double latitudeSouth = max(-90, center.latitude - latDegrees);
@@ -284,20 +278,24 @@ class MyGeoHash {
   /// @param geohash The geohash whose bounding box query to generate.
   /// @param bits The number of bits of precision.
   /// @returns A [start, end] pair of geohashes.
-   List<String> geohashQuery(String geoHash, int bits) {
+  List<String> geohashQuery(String geoHash, int bits) {
     _validateGeoHash(geoHash);
     int precision = (bits / _BITS_PER_CHAR).ceil();
+
     if (geoHash.length < precision) {
       return [geoHash, geoHash + '~'];
     }
+
     geoHash = geoHash.substring(0, precision);
     String base = geoHash.substring(0, geoHash.length - 1);
     int lastValue = _BASE32.indexOf(geoHash[geoHash.length - 1]);
     int significantBits = bits - (base.length * _BITS_PER_CHAR);
     int unusedBits = (_BITS_PER_CHAR - significantBits);
+
     // delete unused bits
     var startValue = (lastValue >> unusedBits) << unusedBits;
     var endValue = startValue + (1 << unusedBits);
+
     if (endValue > 31) {
       return [base + _BASE32[startValue], base + '~'];
     } else {
@@ -311,25 +309,36 @@ class MyGeoHash {
   /// @param center The center given as [latitude, longitude] pair.
   /// @param radius The radius of the circle.
   /// @return An array of geohash query bounds, each containing a [start, end] pair.
-    List<List<String>> geohashQueryBounds(GeoPoint center, double radius) {
+  List<List<String>> geohashQueryBounds(GeoPoint center, double radius) {
     validateLocation(center);
     int queryBits = max(1, boundingBoxBits(center, radius));
     var geohashPrecision = (queryBits / _BITS_PER_CHAR).ceil();
     var coordinates = boundingBoxCoordinates(center, radius);
+
     var queries = coordinates.map((coordinate) {
       return geohashQuery(
-              geoHashForLocation(coordinate, precision: geohashPrecision),
-              queryBits)
-          .toList();
+        geoHashForLocation(coordinate, precision: geohashPrecision),
+        queryBits,
+      ).toList();
     });
+
     List<List<String>> filteredList = [];
-    var tempList =
-        queries.toList().map((e) => e.toString()).toList().toSet().toList();
+    var tempList = queries
+        .toList()
+        .map(
+          (e) => e.toString(),
+        )
+        .toList()
+        .toSet()
+        .toList();
+
     for (int i = 0; i < tempList.length; i++) {
-      filteredList.add([
-        tempList[i].split(',')[0].replaceAll('[', '').trim(),
-        tempList[i].split(',')[1].replaceAll(']', '').trim()
-      ]);
+      filteredList.add(
+        [
+          tempList[i].split(',')[0].replaceAll('[', '').trim(),
+          tempList[i].split(',')[1].replaceAll(']', '').trim(),
+        ],
+      );
     }
     return filteredList;
   }
@@ -378,5 +387,5 @@ class GeoPoint {
       other.longitude == longitude;
 
   @override
-  int get hashCode => hashValues(latitude, longitude);
+  int get hashCode => Object.hash(latitude, longitude);
 }
