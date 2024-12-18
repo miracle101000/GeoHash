@@ -1,6 +1,6 @@
 name: flutter_geo_hash
 description: A library for generating geohashes, validating geographical data, and performing geospatial calculations.
-version: 0.0.5
+version: 0.0.6
 repository: https://github.com/miracle101000/GeoHash/tree/master
 issue_tracker: https://github.com/miracle101000/GeoHash/issues
 

@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
-
 class MyGeoHash {
   static const _GEOHASH_PRECISION = 10;
 
@@ -369,8 +367,6 @@ class MyGeoHash {
   }
 }
 
-/// Represents a geographical point by its longitude and latitude
-@immutable
 class GeoPoint {
   /// Create [GeoPoint] instance.
   const GeoPoint(this.latitude, this.longitude)
